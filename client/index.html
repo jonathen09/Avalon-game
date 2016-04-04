@@ -2,18 +2,20 @@
 <html ng-app='avalon'>
 <head>
   <title>Avalon!!</title>
-  <link rel="stylesheet" type="text/css" href="styles/style.css" />
+  <link rel="stylesheet" type="text/css" href="/app/styles/style.css" />
 </head>
+<body>
   <h1>Avalon: The Ultimate Version </h1>
 
   <!-- the navigation bar -->
   <ul>
-    <li>login</li>
-    <li>logout</li>
+    <li><a href ="#lobby">lobby</a></li>
   </ul>
-
   <div ng-view></div>
-
-<body>
+  <script src="lib/angular/angular.js"></script>
+  <script src="lib/angular-route/angular-route.js"></script>
+  <script src="/app/services/services.js"></script>
+  <script src="/app/lobby/lobby.js"></script>
+  <script src="/app/app.js"></script>
 </body>
 </html>
