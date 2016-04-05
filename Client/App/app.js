@@ -1,4 +1,4 @@
-var app = angular.module('avalon', [
+angular.module('avalon', [
   'avalon.services',
   'avalon.signup',
   'avalon.lobby',

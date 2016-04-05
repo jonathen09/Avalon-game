@@ -1,11 +1,12 @@
 <!-- Div for lobby view -->
 <h3> This is the lobby </h3>
 <div ng-controller="LobbyController">
-<div>{{usersInLobby}}</div>
-  <ul ng-repeat='user in lobby'>
+<div>People in Lobby Currently: {{usersInLobby}}</div>
+  <ul ng-repeat='user in lobbyUsers'>
     <div class="lobbyUser">
       <div class="username">{{user.username}}</div>
       <div class="status">{{user.status}}</div>
   </ul>
-
+<button ng-click="changeStatus()">Ready ?</button>
+<button ng-click="startGame()">Start Game</button>
 </div>
