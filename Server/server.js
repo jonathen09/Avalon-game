@@ -29,15 +29,20 @@ io.on('connection', function(socket) {
   });
 
   socket.on('statusChange', function() {
-    readyUsers++;
     for (var i = 0; i < users.length; i++) {
       if (users[i].username === socket.username) {
-        users[i].status = "ready";
+        if (users[i].status === "ready") {
+          users[i].status = "not ready";
+          --readyUsers;
+        } else {
+          users[i].status = "ready";
+          ++readyUsers;
+        }
       }
     }
     //Check Game Status
     var status = false;
-    if (readyUsers > 6) {
+    if (readyUsers >= 6) {
       status = true;
     }
     io.sockets.emit('server update', {
@@ -62,6 +67,19 @@ io.on('connection', function(socket) {
       username: socket.username
     });
   });
+
+  socket.on('trigger start', function() {
+    io.sockets.emit('game started');
+  });
+
+
+
+
+
+
+
+
+
 
 });
 

@@ -13,6 +13,10 @@ angular.module('avalon.lobby', ['avalon.services'])
     socket.emit('update');
   };
 
+  $scope.start = function() {
+    $location.path('/game');
+  };
+
   //Listener for events
   socket.on('user joined', function (data) {
     console.log('user joined');
@@ -30,6 +34,10 @@ angular.module('avalon.lobby', ['avalon.services'])
     $scope.gameStatus = data.gameStatus;
   });
 
+  socket.on('game started', function() {
+    $scope.start();
+  });
+
   //Functions
   $scope.changeStatus = function() {
     var user = $window.localStorage.username;
@@ -37,7 +45,7 @@ angular.module('avalon.lobby', ['avalon.services'])
   };
 
   $scope.startGame = function() {
-    $location.path('/game');
+    socket.emit('trigger start');
   };
 
   //Function Calls
