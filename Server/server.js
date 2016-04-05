@@ -15,38 +15,51 @@ app.use(express.static(__dirname + '/../Client'));
 //Server Data -> add to mongoose later
 var numUsers = 0;
 var users = [];
+var readyUsers = 0;
 
 io.on('connection', function(socket) {
   var addedUser = false;
   console.log('connecting to io');
 
   socket.on('update', function() {
-    socket.emit('user joined', {
+    io.sockets.emit('server update', {
       numUsers: numUsers,
       users: users
     });
   });
 
-  socket.on('statusChange', function(data) {
+  socket.on('statusChange', function() {
+    readyUsers++;
     for (var i = 0; i < users.length; i++) {
-      if (users[i].username === data) {
+      if (users[i].username === socket.username) {
         users[i].status = "ready";
       }
     }
+    //Check Game Status
+    var status = false;
+    if (readyUsers > 6) {
+      status = true;
+    }
+    io.sockets.emit('server update', {
+      numUsers: numUsers,
+      users: users,
+      gameStatus: status
+    });
   });
 
   //listening to any user login event
   socket.on('add-user', function(user) {
-    console.log('user added');
     users.push(user);
     socket.username = user.username;
     numUsers++;
     addedUser = true;
-
     //Send back data to everyone else
-    socket.emit('user joined', {
+    io.sockets.emit('user joined', {
       numUsers: numUsers,
       users: users
+    });
+    socket.emit('your username', {
+      username: socket.username
     });
   });
 
