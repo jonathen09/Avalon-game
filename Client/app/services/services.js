@@ -1,7 +1,7 @@
 //Factory for using socket.io]
 angular.module('avalon.services', [])
 
-.factory('socket', function ($rootscope) {
+.factory('socket',function ($rootScope) {
   var socket = io.connect();
     return {
       on: function (eventName, callback) {

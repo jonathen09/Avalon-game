@@ -9,13 +9,36 @@ var port = 8080;
 
 mongoose.connect('mongodb://localhost/avalon');
 
-//Serve Static HTML
 app.use(express.static(__dirname + '/../Client'));
+//Serve Static HTML
 
-//require('./config/routes.js')(app, express);
+//Server Data -> add to mongoose later
+var numUsers = 0;
+
+io.on('connection', function(socket) {
+  var addedUser = false;
+  console.log('connecting to io');
+
+  //listening to any user login event
+  socket.on('add-user', function(user) {
+    socket.username = user;
+    console.log(socket.username);
+    ++numUsers;
+    addedUser = true;
+
+    socket.emit('login', {
+      numUsers:numUsers
+    });
+
+    socket.broadcast.emit('user joined', {
+      //username: socket.username,
+      numUsers: numUsers
+    });
+  });
+});
 
 //Connect to Port
-app.listen(port);
+server.listen(port);
 
 
 console.log('Server up on ' + port);

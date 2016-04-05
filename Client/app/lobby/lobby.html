@@ -1,6 +1,7 @@
 <!-- Div for lobby view -->
 <h3> This is the lobby </h3>
 <div ng-controller="LobbyController">
+<div>{{usersInLobby}}</div>
   <ul ng-repeat='user in lobby'>
     <div class="lobbyUser">
       <div class="username">{{user.username}}</div>
