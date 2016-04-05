@@ -2,6 +2,7 @@ angular.module('avalon', [
   'avalon.services',
   'avalon.signup',
   'avalon.lobby',
+  'avalon.game',
   'ngRoute'
 ])
 .config(function ($routeProvider, $httpProvider){
@@ -13,6 +14,10 @@ angular.module('avalon', [
     .when('/lobby', {
       templateUrl: 'app/lobby/lobby.html',
       controller: 'LobbyController'
+    })
+    .when('/game', {
+      templateUrl: 'app/game/game.html',
+      controller: 'GameController'
     })
     .otherwise({
       redirectTo:'/signup'

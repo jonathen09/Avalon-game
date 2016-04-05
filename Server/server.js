@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+var _ = require('underscore');
 
 //Configurations
 var port = 8080;
@@ -16,6 +17,9 @@ app.use(express.static(__dirname + '/../Client'));
 var numUsers = 0;
 var users = [];
 var readyUsers = 0;
+var gameStarted = false;
+var cards = ["merlin","perceival","morgana","assassin","good","good"];
+var dealt = [];
 
 io.on('connection', function(socket) {
   var addedUser = false;
@@ -25,6 +29,13 @@ io.on('connection', function(socket) {
     io.sockets.emit('server update', {
       numUsers: numUsers,
       users: users
+    });
+  });
+
+  socket.on('getUsername', function() {
+    console.log(socket.username);
+    socket.emit('username', {
+      username: socket.username
     });
   });
 
@@ -69,10 +80,22 @@ io.on('connection', function(socket) {
   });
 
   socket.on('trigger start', function() {
+    gameStarted = true;
+
+    //Shuffle and set cards for the game
+    var tempCards =_.shuffle(cards);
+    var tempDealt = [];
+    for (var i = 0; i < tempCards.length; i++) {
+      tempDealt.push([users[i].username,tempCards[i]]);
+    }
+    dealt = tempDealt;
     io.sockets.emit('game started');
+
   });
 
-
+  socket.on('getCards', function() {
+    io.sockets.emit('cards', dealt);
+  });
 
 
 

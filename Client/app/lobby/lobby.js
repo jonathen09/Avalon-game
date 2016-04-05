@@ -40,7 +40,6 @@ angular.module('avalon.lobby', ['avalon.services'])
 
   //Functions
   $scope.changeStatus = function() {
-    var user = $window.localStorage.username;
     socket.emit('statusChange');
   };
 
