@@ -1,0 +1,25 @@
+
+.captain {
+  display: block;
+}
+
+.voting {
+  display: block;
+}
+
+.interaction {
+  border:5px solid black;
+}
+
+.scoreboard {
+  border:5px solid navy;
+}
+
+.profile {
+  border:5px solid navy;
+  float:right;
+}
+
+.card {
+  float: left;
+}

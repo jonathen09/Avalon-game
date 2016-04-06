@@ -8,7 +8,7 @@ var _ = require('underscore');
 //Configurations
 var port = 8080;
 
-mongoose.connect('mongodb://localhost/avalon');
+  mongoose.connect('mongodb://localhost/avalon');
 
 app.use(express.static(__dirname + '/../Client'));
 //Serve Static HTML
@@ -18,8 +18,14 @@ var numUsers = 0;
 var users = [];
 var readyUsers = 0;
 var gameStarted = false;
-var cards = ["merlin","perceival","morgana","assassin","good","good"];
+var cards = ["merlin","percival","morgana","assassin","good","good"];
 var dealt = [];
+var start = -1;
+var votes = 0;
+var roundResult = [];
+var onMission = [];
+var missionResult = true;
+var submits = 0;
 
 io.on('connection', function(socket) {
   var addedUser = false;
@@ -89,21 +95,65 @@ io.on('connection', function(socket) {
       tempDealt.push([users[i].username,tempCards[i]]);
     }
     dealt = tempDealt;
+    start = _.random(0,users.length);
     io.sockets.emit('game started');
 
   });
 
   socket.on('getCards', function() {
-    io.sockets.emit('cards', dealt);
+    io.sockets.emit('cards', {
+      card: dealt,
+      start: start
+    });
   });
 
+  socket.on('team vote call', function() {
+    io.sockets.emit('turn on voting');
+  });
 
+  socket.on('vote', function(data) {
+    votes += data;
+  });
 
+  socket.on('close vote', function() {
+    var result;
+    if (votes >=1) {
+      result = "Passed";
+      roundResult.push(true);
+      io.sockets.emit('passed', onMission);
+    } else {
+      result = "Failed";
+      roundResult.push(false);
+      io.sockets.emit('failed', onMission);
+    }
+    votes = 0;
 
+    //need to add round end and stuff
+  });
 
+  socket.on('pick player',function(arrayOfPicks) {
+    onMission = arrayOfPicks;
+    io.sockets.emit('player picked',arrayOfPicks);
+  });
 
+  socket.on('approve', function() {
+    submits++;
+    if (submits === onMission.length) {
+      io.sockets.emit('mission result', missionResult);
+      missionResult = true;
+      submits = 0;
+    }
+  });
 
-
+  socket.on('sabotage', function() {
+    submits++;
+    missionResult = false;
+    if (submits === onMission.length) {
+      io.sockets.emit('mission result', missionResult);
+      missionResult = true;
+      submits = 0;
+    }
+  });
 });
 
 //Connect to Port

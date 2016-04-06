@@ -1,6 +1,48 @@
 <h2> The Game Has Begun </h2>
 <div ng-controller="GameController">
-<div>{{username}} You are: {{side}}</div>
-<div>Your Role is: {{role}}</div>
-<div>Your Relevant Information </div>
-<div>{{information}}</div>
+
+  <div class = "interaction">
+    <div ng-show="voteResultShow">Team Picking Results :{{voteResult}}</div>
+    <div ng-show="missionResultShow">Mission Results ={{missionResult}}</div>
+   <button class='captain' ng-click="callVote()" ng-show="captainButton">Call Vote</button>
+   <button class='captain' ng-click="closeVote()" ng-show="captainButton">Close Voting</button>
+   <button class='voting' ng-click="accept()" ng-show="votingButton">Approve</button>
+   <button class='voting' ng-click="decline()" ng-show="votingButton">Decline</button>
+   <button class='mission' ng-click="approve()" ng-show="onMission">Pass</button>
+   <button class='mission' ng-click="sabotage()" ng-show="onMission">Sabotage</button>
+  </div>
+
+  <br>
+
+  <div class = "scoreboard">
+   <div>Game Information</div>
+   <div>The Round Captain: {{captain}}</div>
+  </div>
+
+  <br>
+
+  <div class = "profile">
+    <div>Your Information</div>
+    <div>-> {{username}} </div>
+    <div>-> Team:{{side}}</div>
+    <div>-> Role:{{role}}</div>
+    <div>Your Relevant Information </div>
+    <div>{{information}}</div>
+  </div>
+
+  <div class ="players">
+    <h4>Players Available</h4>
+    <ul ng-repeat='player in cards'>
+      <li><p ng-click='addToTeam(player)'>{{player[0]}}</p></li>
+    </ul>
+  </div>
+
+  <div class ="players picked">
+    <h4>Players Picked</h4>
+    <ul ng-repeat='pickedPlayer in picked'>
+      <li><p ng-click='removeFromTeam(pickedPlayer)'>{{pickedPlayer}}</p></li>
+    </ul>
+  </div>
+
+  <img class="card" ng-src="/app/assets/{{role}}.jpg" />
+</div>

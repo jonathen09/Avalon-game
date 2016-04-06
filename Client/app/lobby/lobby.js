@@ -24,9 +24,6 @@ angular.module('avalon.lobby', ['avalon.services'])
     $scope.lobbyUsers = data.users;
   });
 
-  socket.on('your username', function (data) {
-    $scope.username = data.username;
-  });
 
   socket.on('server update', function (data) {
     $scope.userInLobby = data.numUsers;
